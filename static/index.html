@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zwaveApp" ng-controller="zwaveMainCtrl">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Zwave</title>
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+        <script src="socket.io/socket.io.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/controllers.js"></script>
+        <script src="js/filters.js"></script>
+        <script src="js/services.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <table class="table table-hover">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>State</th>
+                </tr>
+                <tr ng-repeat="(nodeid, nodeinfo) in nodes | onlyswitches">
+                    <td>{{ nodeid }}</td>
+                    <td>{{ nodeinfo.name }}</td>
+                    <td>{{ nodeinfo.loc }}</td>
+                    <td>
+                        <div class="btn-group" ng-click="toggleNode(nodeid)">
+                            <button ng-class="
+                            {'btn-success': nodeinfo.classes[37][0].value,
+                             'btn-default': !nodeinfo.classes[37][0].value,
+                             'active': nodeinfo.classes[37][0].value,
+                             'btn': true}">
+                                ON
+                            </button>
+                            <button ng-class="
+                            {'btn-danger': !nodeinfo.classes[37][0].value,
+                             'btn-default': nodeinfo.classes[37][0].value,
+                             'active': !nodeinfo.classes[37][0].value,
+                             'btn': true}">
+                                OFF
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>
