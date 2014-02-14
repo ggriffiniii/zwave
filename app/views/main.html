@@ -1,0 +1,31 @@
+<table class="table table-hover">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Location</th>
+        <th>State</th>
+    </tr>
+    <tr ng-repeat="(nodeid, nodeinfo) in nodes | onlyswitches">
+        <td>{{ nodeid }}</td>
+        <td>{{ nodeinfo.name }}</td>
+        <td>{{ nodeinfo.loc }}</td>
+        <td>
+            <div class="btn-group" ng-click="toggleNode(nodeid)">
+                <button ng-class="
+                {'btn-success': nodeinfo.classes[37][0].value,
+                 'btn-default': !nodeinfo.classes[37][0].value,
+                 'active': nodeinfo.classes[37][0].value,
+                 'btn': true}">
+                    ON
+                </button>
+                <button ng-class="
+                {'btn-danger': !nodeinfo.classes[37][0].value,
+                 'btn-default': nodeinfo.classes[37][0].value,
+                 'active': !nodeinfo.classes[37][0].value,
+                 'btn': true}">
+                    OFF
+                </button>
+            </div>
+        </td>
+    </tr>
+</table>
