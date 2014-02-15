@@ -32,9 +32,17 @@ module.exports = function (grunt) {
       dev: {
         options: {
           /* jshint camelcase: false */
+          node_env: 'dev',
+          /* jshint camelcase: true */
+          port: 8001
+        }
+      },
+      fake: {
+        options: {
+          /* jshint camelcase: false */
           node_env: 'fake',
           /* jshint camelcase: true */
-          port: 8888
+          port: 8002
         }
       },
       prod: {
@@ -42,7 +50,7 @@ module.exports = function (grunt) {
           /* jshint camelcase: false */
           node_env: 'prod',
           /* jshint camelcase: true */
-          port: 80
+          port: 8003
         }
       }
     },
@@ -338,13 +346,14 @@ module.exports = function (grunt) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'express:prod', 'express-keepalive']);
     }
+      
 
     grunt.task.run([
       'clean:server',
       'bower-install',
       'concurrent:server',
       'autoprefixer',
-      'express:dev',
+      'express:' + target,
       'watch'
     ]);
   });
