@@ -42,7 +42,7 @@ module.exports = function (grunt) {
           /* jshint camelcase: false */
           node_env: 'fake',
           /* jshint camelcase: true */
-          port: 8002
+          port: 8001
         }
       },
       prod: {
@@ -50,7 +50,7 @@ module.exports = function (grunt) {
           /* jshint camelcase: false */
           node_env: 'prod',
           /* jshint camelcase: true */
-          port: 8003
+          port: 8002
         }
       }
     },

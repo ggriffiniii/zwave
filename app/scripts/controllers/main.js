@@ -6,6 +6,22 @@ zwaveApp.controller('MainCtrl', ['$scope', 'Socket',
   function ($scope, Socket) {
     $scope.nodes = {};
 
+    $scope.setName = function(nodeId) {
+      var node = $scope.nodes[nodeId];
+      Socket.emit('setName', {
+        nodeId: nodeId,
+        name: node.name
+      });
+    };
+
+    $scope.setLocation = function(nodeId) {
+      var node = $scope.nodes[nodeId];
+      Socket.emit('setLocation', {
+        nodeId: nodeId,
+        location: node.loc
+      });
+    };
+
     $scope.toggleNode = function(nodeId) {
       var node = $scope.nodes[nodeId];
       Socket.emit('setValue', {

@@ -4,7 +4,8 @@
   "dependencies": {
     "express": "~3.4.8",
     "socket.io": "~0.9.16",
-    "openzwave": "0.0.32"
+    "openzwave": "0.0.32",
+    "moment": "~2.5.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

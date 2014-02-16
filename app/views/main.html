@@ -7,8 +7,8 @@
     </tr>
     <tr ng-repeat="(nodeid, nodeinfo) in nodes | onlyswitches">
         <td>{{ nodeid }}</td>
-        <td>{{ nodeinfo.name }}</td>
-        <td>{{ nodeinfo.loc }}</td>
+        <td><input ng-model="nodeinfo.name" ng-blur="setName(nodeid)"></td>
+        <td><input ng-model="nodeinfo.loc" ng-blur="setLocation(nodeid)"></td>
         <td>
             <div class="btn-group" ng-click="toggleNode(nodeid)">
                 <button ng-class="

@@ -1,8 +1,12 @@
+var trackers = require('./lib/nodetracker.js');
 if (process.env.NODE_ENV == "fake") {
-    var nodeTracker = require('./lib/fakenodetracker.js');
+    var tracker = new trackers.fakeTracker();
+    tracker.createFakeSwitch(1);
+    tracker.createFakeSwitch(16);
+    tracker.createFakeSwitch(33);
+    tracker.createFakeSwitch(60);
 } else {
-    var nodeTracker = require('./lib/nodetracker.js');
+    var tracker = new trackers.tracker();
 }
 
-var tracker = new nodeTracker();
 require('./lib/main.js')(tracker);
