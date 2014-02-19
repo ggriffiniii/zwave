@@ -5,9 +5,9 @@ var zwaveApp = angular.module('zwaveApp');
 zwaveApp.filter('onlyswitches', function() {
   return function(nodes) {
     var switches = {};
-    angular.forEach(nodes, function(nodeinfo, nodeid) {
+    angular.forEach(nodes, function(nodeinfo, nodeId) {
       if (37 in nodeinfo.classes) {
-        switches[nodeid] = nodeinfo;
+        switches[nodeId] = nodeinfo;
       }
     });
     return switches;

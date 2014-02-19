@@ -5,30 +5,15 @@
         <th>Location</th>
         <th>State</th>
     </tr>
-    <tr ng-repeat="(nodeid, nodeinfo) in nodes | onlyswitches">
-        <td>{{ nodeid }}</td>
-        <td><input ng-model="nodeinfo.name" ng-blur="setName(nodeid)"></td>
-        <td><input ng-model="nodeinfo.loc" ng-blur="setLocation(nodeid)"></td>
+    <tr ng-repeat="(nodeId, nodeinfo) in nodes | onlyswitches">
+        <td>{{ nodeId }}</td>
+        <td><input ng-model="nodeinfo.name" ng-blur="setName(nodeId)"></td>
+        <td><input ng-model="nodeinfo.loc" ng-blur="setLocation(nodeId)"></td>
         <td>
-            <div class="btn-group" ng-click="toggleNode(nodeid)">
-                <button ng-class="
-                {'btn-success': nodeinfo.classes[37][0].value,
-                 'btn-default': !nodeinfo.classes[37][0].value,
-                 'active': nodeinfo.classes[37][0].value,
-                 'btn': true}">
-                    ON
-                </button>
-                <button ng-class="
-                {'btn-danger': !nodeinfo.classes[37][0].value,
-                 'btn-default': nodeinfo.classes[37][0].value,
-                 'active': !nodeinfo.classes[37][0].value,
-                 'btn': true}">
-                    OFF
-                </button>
-            </div>
+          <on-off-toggle value="nodeinfo.classes[37][0].value" on-click="toggleNode(nodeId)" />
         </td>
         <td>
-          <a href="#/nodes/{{ nodeid }}">Edit</a>
+          <a href="#/nodes/{{ nodeId }}">Edit</a>
         </td>
     </tr>
 </table>

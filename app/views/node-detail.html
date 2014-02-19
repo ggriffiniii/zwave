@@ -1,48 +1,31 @@
 <table class="table table-hover">
     <tr>
-        <th>ID</th><td>{{ nodeid }}</td>
+        <th>ID</th><td>{{ nodeId }}</td>
     </tr><tr>
-        <th>Name</th><td>{{ nodes[nodeid].name }}</td>
+        <th>Name</th><td>{{ nodes[nodeId].name }}</td>
     </tr><tr>
-        <th>Location</th><td>{{ nodes[nodeid].loc }}</td>
+        <th>Location</th><td>{{ nodes[nodeId].loc }}</td>
     </tr><tr>
         <th>State</th>
         <td>
-          <div class="btn-group" ng-click="toggleNode(nodeid)">
-              <button ng-class="
-              {'btn-success': nodes[nodeid].classes[37][0].value,
-               'btn-default': !nodes[nodeid].classes[37][0].value,
-               'active': nodes[nodeid].classes[37][0].value,
-               'btn': true}">
-                  ON
-              </button>
-              <button ng-class="
-              {'btn-danger': !nodes[nodeid].classes[37][0].value,
-               'btn-default': nodes[nodeid].classes[37][0].value,
-               'active': !nodes[nodeid].classes[37][0].value,
-               'btn': true}">
-                  OFF
-              </button>
-          </div>
+          <on-off-toggle value="nodes[nodeId].classes[37][0].value" ng-click="toggleNode(nodeId)">
+          </on-off-toggle>
       </td>
     </tr>
 </table>
 <table class="table table-hover">
   <tr><th>Day</th><th>Time</th><th>Off/On</th></tr>
-  <tr ng-repeat="event in nodes[nodeid].recurringEvents">
+  <tr ng-repeat="event in nodes[nodeId].recurringEvents">
     <td>{{ event.weekday | weekday }}</td>
     <td>{{ event | eventTime }}</td>
     <td>
-      <span ng-switch on="event.value">
-        <span ng-switch-when="true">On</span>
-        <span ng-switch-when="false">Off</span>
-      </span>
-      <span><small><a>Remove</a></small></span>
+      <on-off-toggle value="event.value"></on-off-toggle>
+      <span><small><a ng-click="removeEvent(event.id)">Remove</a></small></span>
     </td>
   </tr>
   <tr>
     <td>
-      <select ng-model="weekday">
+      <select class="form-control" ng-model="weekday">
         <option value="0">{{ 0|weekday }}</option>
         <option value="1">{{ 1|weekday }}</option>
         <option value="2">{{ 2|weekday }}</option>
@@ -52,13 +35,16 @@
         <option value="6">{{ 6|weekday }}</option>
       </select>
     </td>
-    <td><input ng-model="hour" /><input ng-model="minute" /></td>
     <td>
-      <select ng-model="value">
-        <option value="true">On</option>
-        <option value="false">Off</option>
-      </select>
-      <button class="btn btn-primary" ng-click="addEvent">
+      <form class="form-inline">
+        <div class="form-group">
+          <input class="form-control" ng-model="hour" />
+          <input class="form-control" ng-model="minute" /></td>
+        </div>
+      </form>
+    <td>
+      <on-off-toggle value="value" ng-click="value = !value"></on-off-toggle>
+      <button class="btn btn-primary" ng-click="addEvent()">
         Add
       </button>
     </td>

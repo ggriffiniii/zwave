@@ -90,7 +90,7 @@ module.exports = function (grunt) {
           'server.js',
           'lib/**/*.{js,json}'
         ],
-        tasks: ['newer:jshint:server', 'express:dev'],
+        tasks: ['newer:jshint:server', 'express:fake'],
         options: {
           livereload: true,
           nospawn: true
@@ -159,10 +159,6 @@ module.exports = function (grunt) {
         ignorePath: '<%= yeoman.app %>/'
       }
     },
-
-
-
-
 
     // Renames files for browser caching purposes
     rev: {

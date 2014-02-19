@@ -1,32 +1,50 @@
 'use strict';
+/* global moment */
 
 var zwaveApp = angular.module('zwaveApp');
 
-zwaveApp.controller('NodeListCtrl', ['$scope',
-  function ($scope) {
-  }
-]);
+zwaveApp.controller('NodeListCtrl', []);
 
-zwaveApp.controller('NodeDetailCtrl', ['$scope', '$routeParams',
-  function ($scope, $routeParams) {
-    $scope.nodeid = Number($routeParams.nodeId);
+zwaveApp.controller('NodeDetailCtrl', ['$scope', '$routeParams', 'Socket',
+  function ($scope, $routeParams, Socket) {
+    $scope.nodeId = Number($routeParams.nodeId);
 
-    $scope.weekday = 0;
-    $scope.hour = 0;
-    $scope.minute = 0;
-    $scope.value = true;
+    function initEventValues() {
+      $scope.weekday = 0;
+      $scope.hour = 0;
+      $scope.minute = 0;
+      $scope.value = true;
+    }
+    initEventValues();
 
     $scope.addEvent = function() {
-      var event = {
-        weekday: Number($scope.weekday),
-        hour: Number($scope.hour),
-        minute: Number($scope.minute),
+      console.log('add event');
+      var newEventTime = moment()
+          .weekday($scope.weekday)
+          .hour($scope.hour)
+          .minute($scope.minute)
+          .second(0)
+          .millisecond(0);
+      // Use UTC when sending to server.
+      newEventTime.utc();
+      var eventSpec = {
+        weekday: newEventTime.isoWeekday(),
+        hour: newEventTime.hour(),
+        minute: newEventTime.minute(),
         value: Boolean($scope.value)
       };
-      $scope.nodes[$scope.nodeid].recurringEvents.push(event);
-      Socket.emit('setRecurringEvents', {
-        nodeId: $scope.nodeid,
-        recurringEvents: $scope.nodes[$scope.nodeid].recurringEvents
+      Socket.emit('addRecurringEvent', {
+        nodeId: $scope.nodeId,
+        eventSpec: eventSpec
+      });
+      initEventValues();
+    };
+
+    $scope.removeEvent = function(eventId) {
+      console.log('remove event ' + eventId);
+      Socket.emit('removeRecurringEvent', {
+        nodeId: $scope.nodeId,
+        eventId: eventId
       });
     };
   }
