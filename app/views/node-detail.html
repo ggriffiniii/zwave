@@ -1,0 +1,66 @@
+<table class="table table-hover">
+    <tr>
+        <th>ID</th><td>{{ nodeid }}</td>
+    </tr><tr>
+        <th>Name</th><td>{{ nodes[nodeid].name }}</td>
+    </tr><tr>
+        <th>Location</th><td>{{ nodes[nodeid].loc }}</td>
+    </tr><tr>
+        <th>State</th>
+        <td>
+          <div class="btn-group" ng-click="toggleNode(nodeid)">
+              <button ng-class="
+              {'btn-success': nodes[nodeid].classes[37][0].value,
+               'btn-default': !nodes[nodeid].classes[37][0].value,
+               'active': nodes[nodeid].classes[37][0].value,
+               'btn': true}">
+                  ON
+              </button>
+              <button ng-class="
+              {'btn-danger': !nodes[nodeid].classes[37][0].value,
+               'btn-default': nodes[nodeid].classes[37][0].value,
+               'active': !nodes[nodeid].classes[37][0].value,
+               'btn': true}">
+                  OFF
+              </button>
+          </div>
+      </td>
+    </tr>
+</table>
+<table class="table table-hover">
+  <tr><th>Day</th><th>Time</th><th>Off/On</th></tr>
+  <tr ng-repeat="event in nodes[nodeid].recurringEvents">
+    <td>{{ event.weekday | weekday }}</td>
+    <td>{{ event | eventTime }}</td>
+    <td>
+      <span ng-switch on="event.value">
+        <span ng-switch-when="true">On</span>
+        <span ng-switch-when="false">Off</span>
+      </span>
+      <span><small><a>Remove</a></small></span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <select ng-model="weekday">
+        <option value="0">{{ 0|weekday }}</option>
+        <option value="1">{{ 1|weekday }}</option>
+        <option value="2">{{ 2|weekday }}</option>
+        <option value="3">{{ 3|weekday }}</option>
+        <option value="4">{{ 4|weekday }}</option>
+        <option value="5">{{ 5|weekday }}</option>
+        <option value="6">{{ 6|weekday }}</option>
+      </select>
+    </td>
+    <td><input ng-model="hour" /><input ng-model="minute" /></td>
+    <td>
+      <select ng-model="value">
+        <option value="true">On</option>
+        <option value="false">Off</option>
+      </select>
+      <button class="btn btn-primary" ng-click="addEvent">
+        Add
+      </button>
+    </td>
+  </tr>
+</table>
