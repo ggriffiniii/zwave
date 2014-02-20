@@ -33,7 +33,6 @@ zwaveApp.controller('MainCtrl', ['$scope', 'Socket',
     };
 
     Socket.on('update', function(nodes) {
-      console.log(nodes);
       angular.forEach(nodes, function(node) {
         if (node.id in $scope.nodes) {
           angular.copy(node, $scope.nodes[node.id]);
@@ -41,7 +40,6 @@ zwaveApp.controller('MainCtrl', ['$scope', 'Socket',
           $scope.nodes[node.id] = angular.copy(node);
         }
       });
-      console.log($scope.nodes);
     });
   }
 ]);

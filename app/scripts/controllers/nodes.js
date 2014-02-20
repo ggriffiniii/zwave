@@ -3,7 +3,9 @@
 
 var zwaveApp = angular.module('zwaveApp');
 
-zwaveApp.controller('NodeListCtrl', []);
+zwaveApp.controller('NodeListCtrl', [
+  function() { console.log('not used yet'); }
+]);
 
 zwaveApp.controller('NodeDetailCtrl', ['$scope', '$routeParams', 'Socket',
   function ($scope, $routeParams, Socket) {
@@ -18,7 +20,6 @@ zwaveApp.controller('NodeDetailCtrl', ['$scope', '$routeParams', 'Socket',
     initEventValues();
 
     $scope.addEvent = function() {
-      console.log('add event');
       var newEventTime = moment()
           .weekday($scope.weekday)
           .hour($scope.hour)
@@ -41,7 +42,6 @@ zwaveApp.controller('NodeDetailCtrl', ['$scope', '$routeParams', 'Socket',
     };
 
     $scope.removeEvent = function(eventId) {
-      console.log('remove event ' + eventId);
       Socket.emit('removeRecurringEvent', {
         nodeId: $scope.nodeId,
         eventId: eventId

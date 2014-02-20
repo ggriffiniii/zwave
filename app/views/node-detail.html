@@ -16,11 +16,11 @@
 <table class="table table-hover">
   <tr><th>Day</th><th>Time</th><th>Off/On</th></tr>
   <tr ng-repeat="event in nodes[nodeId].recurringEvents">
-    <td>{{ event.weekday | weekday }}</td>
-    <td>{{ event | eventTime }}</td>
+    <td>{{ event | eventTime:"dddd" }}</td>
+    <td>{{ event | eventTime:"LT" }}</td>
     <td>
       <on-off-toggle value="event.value"></on-off-toggle>
-      <span><small><a ng-click="removeEvent(event.id)">Remove</a></small></span>
+      <span><small><a ng-click="removeEvent(event.eventId)">Remove</a></small></span>
     </td>
   </tr>
   <tr>

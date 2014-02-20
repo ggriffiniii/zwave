@@ -5,18 +5,6 @@ if (process.env.NODE_ENV == "fake") {
   tracker.createFakeSwitch(16);
   tracker.createFakeSwitch(33);
   tracker.createFakeSwitch(60);
-  tracker.addRecurringEvent(1, {
-    weekday: 0,
-    hour: 17,
-    minute: 0,
-    value: true
-  });
-  tracker.addRecurringEvent(1, {
-    weekday: 0,
-    hour: 23,
-    minute: 0,
-    value: false
-  }); 
 } else {
   var tracker = new trackers.tracker();
 }

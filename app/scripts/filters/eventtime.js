@@ -3,9 +3,12 @@
 
 angular.module('zwaveApp')
   .filter('eventTime', function () {
-    return function (input) {
+    return function (input, format) {
       return moment().utc()
-          .hour(input.hour).minute(input.minute)
-          .local().format('LT');
+          .isoWeekday(input.weekday)
+          .hour(input.hour)
+          .minute(input.minute)
+          .local()
+          .format(format);
     };
   });
