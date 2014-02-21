@@ -6,6 +6,7 @@ angular.module('zwaveApp')
       templateUrl: 'scripts/directives/onofftoggle.html',
       restrict: 'E',
       scope: {
+        disabled: '=',
         value: '=',
         click: '&onClick'
       },

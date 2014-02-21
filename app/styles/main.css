@@ -77,3 +77,7 @@ body {
     border-bottom: 0;
   }
 }
+
+.tab-pane {
+  padding-top: 15px;
+}

@@ -1,6 +1,9 @@
 'use strict';
 
-var zwaveApp = angular.module('zwaveApp', ['ngRoute']);
+var zwaveApp = angular.module('zwaveApp', [
+  'ngRoute',
+  'ui.bootstrap'
+]);
 
 zwaveApp.config(['$routeProvider',
   function($routeProvider) {

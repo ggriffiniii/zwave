@@ -1,19 +1,24 @@
-<table class="table table-hover">
-    <tr>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-hover">
+      <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Location</th>
         <th>State</th>
-    </tr>
-    <tr ng-repeat="(nodeId, nodeinfo) in nodes | onlyswitches">
+      </tr>
+      <tr ng-repeat="(nodeId, nodeinfo) in nodes | onlyswitches">
         <td>{{ nodeId }}</td>
         <td><input ng-model="nodeinfo.name" ng-blur="setName(nodeId)"></td>
         <td><input ng-model="nodeinfo.loc" ng-blur="setLocation(nodeId)"></td>
         <td>
-          <on-off-toggle value="nodeinfo.classes[37][0].value" on-click="toggleNode(nodeId)" />
+          <on-off-toggle value="nodeinfo.classes[37][0].value" on-click="toggleNode(nodeId)">
+          </on-off-toggle>
+          <span class="pull-right">
+            <small><a href="#/nodes/{{ nodeId }}">Edit</a></small>
+          </span>
         </td>
-        <td>
-          <a href="#/nodes/{{ nodeId }}">Edit</a>
-        </td>
-    </tr>
-</table>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -7,7 +7,9 @@
     "openzwave": "0.0.32",
     "moment": "~2.5.1",
     "nedb": "~0.10.4",
-    "async": "~0.2.10"
+    "async": "~0.2.10",
+    "moment-timezone": "0.0.3",
+    "suncalc": "~1.2.2"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
