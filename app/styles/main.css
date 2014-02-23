@@ -81,3 +81,14 @@ body {
 .tab-pane {
   padding-top: 15px;
 }
+
+/* On node-detail we put a form-horizontal within a form-inline */
+.form-inline .form-horizontal .form-group {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.form-inline .form-horizontal .form-control {
+  width: 100%;
+}
+
