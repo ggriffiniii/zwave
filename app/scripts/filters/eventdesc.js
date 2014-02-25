@@ -4,24 +4,26 @@
 angular.module('zwaveApp')
   .filter('eventDesc', function () {
     return function (eventSpec) {
+      var desc = 'Every ';
       if (eventSpec.type === 'static') {
-        return moment().tz(eventSpec.tzName)
+        var t = moment().tz(eventSpec.tzName)
             .isoWeekday(eventSpec.weekday)
             .hour(eventSpec.hour)
             .minute(eventSpec.minute)
             .startOf('minute')
-            .local()
-            .format('dddd at LT');
+            .local();
+        desc += t.format('dddd') + ' at ' + t.format('LT');
       } else {
-        var desc = '';
+        desc += moment().isoWeekday(eventSpec.weekday).format('dddd') + ' at ';
         if (eventSpec.addMinutes) {
           if (eventSpec.addMinutes > 0) {
             desc += eventSpec.addMinutes + ' minutes after ';
           } else if (eventSpec.addMinutes < 0) {
-            desc += eventSpec.addMinutes + ' minutes before ';
+            desc += Math.abs(eventSpec.addMinutes) + ' minutes before ';
           }
         }
-        return desc + eventSpec.type + ' on ' + moment().isoWeekday(eventSpec.weekday).format('dddd');
+        desc += eventSpec.type;
       }
+      return desc;
     };
   });
