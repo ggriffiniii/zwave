@@ -11,7 +11,8 @@
     "angular-route": "1.2.6",
     "moment": "~2.5.1",
     "moment-timezone": "~0.0.3",
-    "angular-bootstrap": "~0.10.0"
+    "angular-bootstrap": "~0.10.0",
+    "suncalc": "*"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",

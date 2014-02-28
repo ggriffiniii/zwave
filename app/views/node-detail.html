@@ -5,13 +5,13 @@
         <tr>
             <th>ID</th><td>{{ nodeId }}</td>
         </tr><tr>
-            <th>Name</th><td>{{ nodes[nodeId].name }}</td>
+            <th>Name</th><td>{{ node.name }}</td>
         </tr><tr>
-            <th>Location</th><td>{{ nodes[nodeId].loc }}</td>
+            <th>Location</th><td>{{ node.loc }}</td>
         </tr><tr>
             <th>State</th>
             <td>
-              <on-off-toggle value="nodes[nodeId].classes[37][0].value" ng-click="toggleNode(nodeId)">
+              <on-off-toggle value="node.classes[37][0].value" ng-click="toggleNode(nodeId)">
               </on-off-toggle>
           </td>
         </tr>
@@ -20,19 +20,26 @@
   <div class="col-md-6">
     <h1>Recurring Events</h1>
     <table class="table table-hover">
-      <tr><th>Off/On</th><th></th></tr>
-      <tr ng-show="recurringEvents.length > 0"
-          ng-repeat="event in recurringEvents = nodes[nodeId].recurringEvents">
+      <tr>
+        <th>Off/On</th>
+        <th>Description</th>
+        <th>Next Event</th>
+        <th></th>
+      </tr>
+      <tr ng-show="events.length > 0"
+          ng-repeat="event in events | orderBy:'nextEvent'">
         <td>
           <on-off-toggle disabled="true" value="event.value"></on-off-toggle>
         </td>
-        <td>{{ event | eventDesc }}
-          <button class="btn btn-danger pull-right" ng-click="removeEvent(event.eventId)">
+        <td>{{ event | eventDesc }}</td>
+        <td>{{ event.nextEvent.from(now) }}</td>
+        <td>
+          <button class="btn btn-sm btn-danger pull-right" ng-click="removeEvent(event.eventId)">
             <span class="glyphicon glyphicon-trash"></span><span> Remove</span>
           </button>
         </td>
       </tr>
-      <tr ng-hide="recurringEvents.length > 0">
+      <tr ng-hide="events.length > 0">
         <td colspan="3">No recurring events configured</td>
       </tr>
     </table>
@@ -43,133 +50,131 @@
     <h2>Add new event</h2>
     <div class="row">
       <div class="col-md-12">
-        <div class="row">
-          <tabset>
-            <tab heading="Static">
-              <form class="form-horizontal within-inline" name="addStaticForm" role="form">
+        <tabset>
+          <tab heading="Static">
+            <form class="form-horizontal within-inline" name="addStaticForm" role="form">
+              <div class="form-group">
+                <label class="col-md-2 control-label">Day</label>
+                <div class="col-md-10">
+                  <select class="form-control" ng-model="newStaticEvent.weekday">
+                    <option ng-repeat="day in [0,1,2,3,4,5,6]" ng-value="day" ng-bind="day|weekday" ng-selected="day == newStaticEvent.weekday"></option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Time</label>
+                <div class="col-md-10">
+                  <timepicker ng-model="newStaticEvent.time" hour-step="1" minute-step="10" readonly-input="true" show-meridian="true"></timepicker>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                  <on-off-toggle value="newStaticEvent.value" ng-click="newStaticEvent.value = !newStaticEvent.value"></on-off-toggle>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                  <button class="btn btn-primary" ng-click="addStaticEvent()">
+                    Add event
+                  </button>
+                </div>
+              </div>
+            </form>
+          </tab>
+          <tab heading="Sunrise">
+            <form class="form-inline" name="addSunriseForm" role="form">
+              <div class="form-horizontal">
                 <div class="form-group">
                   <label class="col-md-2 control-label">Day</label>
                   <div class="col-md-10">
-                    <select class="form-control" ng-model="newStaticEvent.weekday">
-                      <option ng-repeat="day in [0,1,2,3,4,5,6]" ng-value="day" ng-bind="day|weekday" ng-selected="day == newStaticEvent.weekday"></option>
+                    <select class="form-control" ng-model="newSunriseEvent.weekday">
+                      <option ng-repeat="day in [0,1,2,3,4,5,6]" ng-value="day" ng-bind="day|weekday" ng-selected="day == newSunriseEvent.weekday"></option>
                     </select>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="col-md-2 control-label">Time</label>
-                  <div class="col-md-10">
-                    <timepicker ng-model="newStaticEvent.time" hour-step="1" minute-step="10" readonly-input="true" show-meridian="true"></timepicker>
+              </div>
+              <div class="row">
+                <div class="col-md-offset-2 col-md-10">
+                  <div class="form-group" style="margin-bottom: 15px;">
+                    <input class="form-control" ng-model="newSunriseEvent.offsetMin"></input>
                   </div>
+                  <span> minutes </span>
+                  <div class="form-group" style="margin-bottom: 15px;">
+                    <select class="form-control" ng-model="newSunriseEvent.beforeAfter">
+                      <option value="before" selected="selected">Before</option>
+                      <option value="after">After</option>
+                    </select>
+                  </div>
+                  <span> sunrise</span>
                 </div>
+              </div>
+              <div class="form-horizontal">
                 <div class="form-group">
                   <label class="col-md-2 control-label"></label>
                   <div class="col-md-10">
-                    <on-off-toggle value="newStaticEvent.value" ng-click="newStaticEvent.value = !newStaticEvent.value"></on-off-toggle>
+                    <on-off-toggle value="newSunriseEvent.value" ng-click="newSunriseEvent.value = !newSunriseEvent.value"></on-off-toggle>
                   </div>
                 </div>
+              </div>
+              <div class="form-horizontal">
                 <div class="form-group">
                   <div class="col-md-offset-2 col-md-10">
-                    <button class="btn btn-primary" ng-click="addStaticEvent()">
+                    <button class="btn btn-primary" ng-click="addSunriseEvent()">
                       Add event
                     </button>
                   </div>
                 </div>
-              </form>
-            </tab>
-            <tab heading="Sunrise">
-              <form class="form-inline" name="addSunriseForm" role="form">
-                <div class="form-horizontal">
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Day</label>
-                    <div class="col-md-10">
-                      <select class="form-control" ng-model="newSunriseEvent.weekday">
-                        <option ng-repeat="day in [0,1,2,3,4,5,6]" ng-value="day" ng-bind="day|weekday" ng-selected="day == newSunriseEvent.weekday"></option>
-                      </select>
-                    </div>
+              </div>
+            </form>
+          </tab>
+          <tab heading="Sunset">
+            <form class="form-inline" name="addSunsetForm" role="form">
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Day</label>
+                  <div class="col-md-10">
+                    <select class="form-control" ng-model="newSunsetEvent.weekday">
+                      <option ng-repeat="day in [0,1,2,3,4,5,6]" ng-value="day" ng-bind="day|weekday" ng-selected="day == newSunsetEvent.weekday"></option>
+                    </select>
                   </div>
                 </div>
-                <div class="row">
+              </div>
+              <div class="row">
+                <div class="col-md-offset-2 col-md-10">
+                  <div class="form-group" style="margin-bottom: 15px;">
+                    <input class="form-control" ng-model="newSunsetEvent.offsetMin"></input>
+                  </div>
+                  <span> minutes </span>
+                  <div class="form-group" style="margin-bottom: 15px;">
+                    <select class="form-control" ng-model="newSunsetEvent.beforeAfter">
+                      <option value="before" selected="selected">Before</option>
+                      <option value="after">After</option>
+                    </select>
+                  </div>
+                  <span> sunset</span>
+                </div>
+              </div>
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-md-2 control-label"></label>
+                  <div class="col-md-10">
+                    <on-off-toggle value="newSunsetEvent.value" ng-click="newSunsetEvent.value = !newSunsetEvent.value"></on-off-toggle>
+                  </div>
+                </div>
+              </div>
+              <div class="form-horizontal">
+                <div class="form-group">
                   <div class="col-md-offset-2 col-md-10">
-                    <div class="form-group" style="margin-bottom: 15px;">
-                      <input class="form-control" ng-model="newSunriseEvent.offsetMin"></input>
-                    </div>
-                    <span> minutes </span>
-                    <div class="form-group" style="margin-bottom: 15px;">
-                      <select class="form-control" ng-model="newSunriseEvent.beforeAfter">
-                        <option value="before" selected="selected">Before</option>
-                        <option value="after">After</option>
-                      </select>
-                    </div>
-                    <span> sunrise</span>
+                    <button class="btn btn-primary" ng-click="addSunsetEvent()">
+                      Add event
+                    </button>
                   </div>
                 </div>
-                <div class="form-horizontal">
-                  <div class="form-group">
-                    <label class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                      <on-off-toggle value="newSunriseEvent.value" ng-click="newSunriseEvent.value = !newSunriseEvent.value"></on-off-toggle>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-horizontal">
-                  <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                      <button class="btn btn-primary" ng-click="addSunriseEvent()">
-                        Add event
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </tab>
-            <tab heading="Sunset">
-              <form class="form-inline" name="addSunsetForm" role="form">
-                <div class="form-horizontal">
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Day</label>
-                    <div class="col-md-10">
-                      <select class="form-control" ng-model="newSunsetEvent.weekday">
-                        <option ng-repeat="day in [0,1,2,3,4,5,6]" ng-value="day" ng-bind="day|weekday" ng-selected="day == newSunsetEvent.weekday"></option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-offset-2 col-md-10">
-                    <div class="form-group" style="margin-bottom: 15px;">
-                      <input class="form-control" ng-model="newSunsetEvent.offsetMin"></input>
-                    </div>
-                    <span> minutes </span>
-                    <div class="form-group" style="margin-bottom: 15px;">
-                      <select class="form-control" ng-model="newSunsetEvent.beforeAfter">
-                        <option value="before" selected="selected">Before</option>
-                        <option value="after">After</option>
-                      </select>
-                    </div>
-                    <span> sunset</span>
-                  </div>
-                </div>
-                <div class="form-horizontal">
-                  <div class="form-group">
-                    <label class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                      <on-off-toggle value="newSunsetEvent.value" ng-click="newSunsetEvent.value = !newSunsetEvent.value"></on-off-toggle>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-horizontal">
-                  <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                      <button class="btn btn-primary" ng-click="addSunsetEvent()">
-                        Add event
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </tab>
-          </tabset>
-        </div>
+              </div>
+            </form>
+          </tab>
+        </tabset>
       </div>
     </div>
   </div>

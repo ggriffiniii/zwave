@@ -11,9 +11,24 @@ zwaveApp.controller('NodeListCtrl', [
   function() { console.log('not used yet'); }
 ]);
 
-zwaveApp.controller('NodeDetailCtrl', ['$scope', '$routeParams', 'Socket',
-  function ($scope, $routeParams, Socket) {
+zwaveApp.controller('NodeDetailCtrl', ['$interval', '$scope', '$routeParams', 'Eventutils', 'Socket',
+  function ($interval, $scope, $routeParams, Eventutils, Socket) {
     $scope.nodeId = Number($routeParams.nodeId);
+
+    function refreshNextEvents() {
+      $scope.events = $scope.node.recurringEvents.map(function(eventSpec) {
+        var newSpec = angular.copy(eventSpec);
+        newSpec.nextEvent = Eventutils.getNextEventMoment(eventSpec);
+        return newSpec;
+      });
+    }
+
+    $scope.$watch('nodes[nodeId]', function() {
+      $scope.node = $scope.nodes[$routeParams.nodeId];
+      $scope.$watchCollection('node.recurringEvents', function() {
+        refreshNextEvents();
+      });
+    });
 
     $scope.newStaticEvent = {
       weekday: 0,
@@ -31,20 +46,6 @@ zwaveApp.controller('NodeDetailCtrl', ['$scope', '$routeParams', 'Socket',
       beforeAfter: 'before',
       offsetMin: 0,
       value: true
-    };
-
-    $scope.timeUntilNextEvent = function(recurringEvent) {
-      var now = moment();
-      var nextEventTime = moment().tz(recurringEvent.tzName)
-          .isoWeekday(recurringEvent.weekday)
-          .hour(recurringEvent.hour)
-          .minute(recurringEvent.minute)
-          .second(0)
-          .millisecond(0);
-      if (nextEventTime.isBefore(now)) {
-        nextEventTime.add('weeks', 1);
-      }
-      return nextEventTime.diff(now);
     };
 
     function addEvent(eventSpec) {
@@ -104,6 +105,12 @@ zwaveApp.controller('NodeDetailCtrl', ['$scope', '$routeParams', 'Socket',
       };
       addEvent(eventSpec);
     };
+
+    $scope.now = moment();
+    $interval(function() {
+      $scope.now = moment();
+      refreshNextEvents();
+    }, 30000);
 
     $scope.removeEvent = function(eventId) {
       Socket.emit('removeRecurringEvent', {
