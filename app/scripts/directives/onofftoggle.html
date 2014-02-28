@@ -1,16 +1,18 @@
-<div class="btn-group" ng-click="click()">
+<div class="btn-group" ng-click="click()" style="min-width: 84px;">
     <button ng-disabled="disabled" ng-class="
     {'btn-success': value,
      'btn-default': !value,
      'active': value,
-     'btn': true}">
+     'btn': true,
+     'btn-sm': true}">
         ON
     </button>
     <button ng-disabled="disabled" ng-class="
     {'btn-danger': !value,
      'btn-default': value,
      'active': !value,
-     'btn': true}">
+     'btn': true,
+     'btn-sm': true}">
         OFF
     </button>
 </div>
